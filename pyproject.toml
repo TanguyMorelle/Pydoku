@@ -9,3 +9,48 @@ readme = "README.md"
 python = "^3.9"
 numpy = "^1.26.4"
 pytest = "^8.0.0"
+flake8 = "^7.0.0"
+mypy = "^1.8.0"
+black = "^24.2.0"
+vulture = "^2.11"
+bandit = "^1.7.7"
+safety = "^3.0.1"
+isort = "^5.13.2"
+coverage = "^7.4.2"
+pre-commit = "^3.6.2"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+    "integration",
+]
+python_files = "*_test.py"
+python_classes = "*Test"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 88
+exclude = '''
+/(
+      \.git
+    | \.venv
+    | \.__pycache__
+    | \.pytest_cache
+    | \.mypy_cache
+)/
+'''
+
+[tool.coverage.run]
+include = "*/src/*"
+omit = [
+    "*tests*",
+    "*venv*"
+]
+
+[tool.vulture]
+min_confidence = 80
+paths = ["src/", "tests/"]
