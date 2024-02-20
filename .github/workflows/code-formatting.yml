@@ -1,0 +1,30 @@
+name: Formatting
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  check-code-formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          architecture: x64
+
+      - name: Install dependencies
+        run: bash scripts/setup.sh
+
+      - name: Run linter
+        run: bash scripts/linter.sh
+
+      - name: Run type check
+        run: poetry run mypy .
+
+      - name: Check for dead code
+        run: poetry run vulture src tests --min-confidence 80

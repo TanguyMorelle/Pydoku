@@ -1,5 +1,11 @@
 .idea/
 .vscode/
-todo
 **/__pycache__/
 poetry.lock
+/grids
+tests/data
+test.js
+.coverage
+coverage.json
+htmlcov/
+todo

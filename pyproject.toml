@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "src"
-version = "0.0.1"
+version = "1.0.0"
 description = "Python algorithmic sudoku solver"
 authors = ["Tanguy Morelle"]
 readme = "README.md"
@@ -9,3 +9,67 @@ readme = "README.md"
 python = "^3.9"
 numpy = "^1.26.4"
 pytest = "^8.0.0"
+flake8 = "^7.0.0"
+mypy = "^1.8.0"
+black = "^24.2.0"
+vulture = "^2.11"
+bandit = "^1.7.7"
+safety = "^3.0.1"
+isort = "^5.13.2"
+coverage = "^7.4.2"
+pre-commit = "^3.6.2"
+
+[tool.pytest.ini_options]
+tmp_path_retention_count = 1
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+    "integration",
+]
+python_files = "*_test.py"
+python_classes = "*Test"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 88
+exclude = '''
+/(
+      \.git
+    | \.venv
+    | \.__pycache__
+    | \.pytest_cache
+    | \.mypy_cache
+)/
+'''
+
+[tool.vulture]
+min_confidence = 80
+paths = ["src/", "tests/"]
+# issue with @asbtractmethod not beeing ignored properly
+exclude = ["*_interface.py"]
+
+[tool.coverage.run]
+omit = [
+    "*/__init__.py",
+    "tests/*",
+    "src/domain/ports/*",
+]
+
+[tool.coverage.report]
+exclude_also = [
+    "if TYPE_CHECKING:"
+]
+
+
+[tool.poetry.scripts]
+tests = "scripts:coverage"
+linter = "scripts:run_linter"
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = [
+    "tests/*",
+]
