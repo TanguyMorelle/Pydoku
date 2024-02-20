@@ -1,0 +1,54 @@
+name: Tests
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+
+  jobs:
+    run-tests:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: Set up Python
+          uses: actions/setup-python@v4
+          with:
+            python-version: 3.11
+            architecture: x64
+
+        - name: Install dependencies
+          run: python -m pip install --upgrade pip
+
+        - name: Install poetry
+          run: pip install poetry
+
+        - name: Install dependencies
+          run: |
+            poetry lock
+            poetry install
+
+        - name: Run tests with coverage
+          run: |
+              poetry run coverage run -m pytest -v --junitxml=junit-report.xml
+              poetry run coverage report -m
+              poetry run coverage report --fail-under=90
+              poetry run coverage xml
+
+        - name: Upload coverage XML report
+          uses: actions/upload-artifact@v3
+          with:
+            name: coverage-report
+            path: coverage.xml
+
+        - name: Upload junit XML report
+          uses: actions/upload-artifact@v3
+          with:
+            name: junit-report
+            path: junit-report.xml
+
+        - name: Check for dead code
+          run: poetry run vulture src tests --min-confidence 70
+
+        - name: Check for security vulnerabilities

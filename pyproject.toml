@@ -1,0 +1,11 @@
+[tool.poetry]
+name = "src"
+version = "0.0.1"
+description = "Python algorithmic sudoku solver"
+authors = ["Tanguy Morelle"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^1.26.4"
+pytest = "^8.0.0"
