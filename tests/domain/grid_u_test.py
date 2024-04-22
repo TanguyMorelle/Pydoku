@@ -41,7 +41,7 @@ class ValueGridUTest:
 
 
 class PossibleValuesGridUTest:
-    def test__get_row_no_value(self) -> None:
+    def test__get_row__no_value(self) -> None:
         # Given
         grid = np.array(list([[m] * 9] * 9 for m in range(9)))
         possible_values_grid = PossibleValuesGrid(grid)
@@ -52,7 +52,7 @@ class PossibleValuesGridUTest:
         # Then
         assert np.array_equal(row, np.array([[4] * 9] * 9))
 
-    def test__get_column_no_value(self) -> None:
+    def test__get_column__no_value(self) -> None:
         # Given
         grid = np.array(list([[m] * 9] * 9 for m in range(9))).transpose(1, 0, 2)
         possible_values_grid = PossibleValuesGrid(grid)
@@ -63,7 +63,7 @@ class PossibleValuesGridUTest:
         # Then
         assert np.array_equal(column, np.array([[4] * 9] * 9))
 
-    def test__get_block_no_value(self) -> None:
+    def test__get_block__no_value(self) -> None:
         # Given
         grid = np.array(list([[n**2 + m] * 9 for m in range(9)] for n in range(9)))
         possible_values_grid = PossibleValuesGrid(grid)
@@ -83,7 +83,7 @@ class PossibleValuesGridUTest:
             ),
         )
 
-    def test__get_row_with_value(self) -> None:
+    def test__get_row__with_value(self) -> None:
         # Given
         grid = np.array(list([[m**2 + i for i in range(9)]] * 9 for m in range(9)))
         possible_values_grid = PossibleValuesGrid(grid)
@@ -94,7 +94,7 @@ class PossibleValuesGridUTest:
         # Then
         assert np.array_equal(row, np.array([21] * 9))
 
-    def test__get_column_with_value(self) -> None:
+    def test__get_column__with_value(self) -> None:
         # Given
         grid = np.array(
             list([[m**2 + i for i in range(9)]] * 9 for m in range(9))
@@ -107,7 +107,7 @@ class PossibleValuesGridUTest:
         # Then
         assert np.array_equal(row, np.array([21] * 9))
 
-    def test__get_block_with_value(self) -> None:
+    def test__get_block__with_value(self) -> None:
         # Given
         grid = np.array(
             list(

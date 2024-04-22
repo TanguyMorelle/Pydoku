@@ -2,7 +2,7 @@ from typing import Optional
 
 from src.adapters.solve_path_txt_handler import SolvePathTxtHandler
 from src.domain.solve_path import SolvePath
-from src.domain.strategies import StrategyLevels
+from src.domain.strategies.strategy_levels import StrategyLevels
 from src.domain.sudoku import Sudoku
 from src.domain.updates import Update
 

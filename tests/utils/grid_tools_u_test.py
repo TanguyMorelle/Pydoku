@@ -1,4 +1,4 @@
-from src.utils.grid_tools import get_block, get_visibility
+from src.utils.grid_tools import get_block, get_subsets, get_visibility
 
 
 class GridToolsUTest:
@@ -45,3 +45,47 @@ class GridToolsUTest:
 
         # Then
         assert result == expected_block
+
+    def test__get_subset_should_return_subset(self) -> None:
+        # Given
+        position = (5, 7)
+        elements = list(range(5))
+
+        # When
+        result = list(get_subsets(elements))
+
+        # Then
+        assert len(result) == 3
+        assert result[0] == [
+            (0, 1),
+            (0, 2),
+            (0, 3),
+            (0, 4),
+            (1, 2),
+            (1, 3),
+            (1, 4),
+            (2, 3),
+            (2, 4),
+            (3, 4),
+        ]
+
+        assert result[1] == [
+            (0, 1, 2),
+            (0, 1, 3),
+            (0, 1, 4),
+            (0, 2, 3),
+            (0, 2, 4),
+            (0, 3, 4),
+            (1, 2, 3),
+            (1, 2, 4),
+            (1, 3, 4),
+            (2, 3, 4),
+        ]
+
+        assert result[2] == [
+            (0, 1, 2, 3),
+            (0, 1, 2, 4),
+            (0, 1, 3, 4),
+            (0, 2, 3, 4),
+            (1, 2, 3, 4),
+        ]

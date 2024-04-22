@@ -6,7 +6,7 @@ from src.domain.updates import GridUpdate
 
 
 class SolvePathTxtHandlerUTest:
-    def test__save_should_write_empty_solve_path_to_file(self, tmp_path) -> None:
+    def test__save__should_write_empty_solve_path_to_file(self, tmp_path) -> None:
         # Given
         name = "test_solve_path_txt_handler_save"
         filename = tmp_path / name
@@ -20,7 +20,7 @@ class SolvePathTxtHandlerUTest:
         # Then
         assert save_filename.read_text() == "\n--END--"
 
-    def test__save_should_write_solve_path_to_file(self, tmp_path) -> None:
+    def test__save__should_write_solve_path_to_file(self, tmp_path) -> None:
         # Given
         name = "test_solve_path_txt_handler_save"
         filename = tmp_path / name

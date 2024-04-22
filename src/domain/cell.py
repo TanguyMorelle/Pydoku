@@ -32,5 +32,8 @@ class Cell:
             return False
         return self.__dict__ == other.__dict__
 
+    def __lt__(self, other: "Cell") -> bool:
+        return self.position <= other.position
+
     def __hash__(self) -> int:
         return hash((self.row, self.column, self.values))

@@ -1,7 +1,7 @@
 import numpy as np
 
 from src.domain.cell import Cell
-from src.domain.strategies.base import Unicity
+from src.domain.strategies.base.unicity import Unicity
 from src.domain.units import Units
 from src.domain.updates import GridUpdate
 from tests.fixtures.fake_sudoku_factory import fake_sudoku_factory

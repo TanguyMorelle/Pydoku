@@ -11,7 +11,7 @@ from tests.fixtures.grids.sequences import (
 
 
 class SeqSudokuLoaderUTest:
-    def test__load_invalid_sequence_should_raise_exception(self) -> None:
+    def test__load__invalid_sequence_should_raise_exception(self) -> None:
         # Given
         invalid_sequence = "12345"
         handler = SudokuSeqHandler()
@@ -20,7 +20,7 @@ class SeqSudokuLoaderUTest:
         with pytest.raises(InvalidInputException):
             handler.load(invalid_sequence)
 
-    def test__load_with_valid_sequence_should_return_sudoku(self) -> None:
+    def test__load__with_valid_sequence_should_return_sudoku(self) -> None:
         # Given
         sequence = EASY_GRID_SEQUENCE_WITH_RANDOM_CHARS
         handler = SudokuSeqHandler()
@@ -31,7 +31,7 @@ class SeqSudokuLoaderUTest:
         # Then
         assert np.array_equal(sudoku.initial_grid, EASY_GRID)
 
-    def test__save_should_write_sequence_to_file(self, tmp_path) -> None:
+    def test__save__should_write_sequence_to_file(self, tmp_path) -> None:
         # Given
         name = "test_seq_sudoku_loader_save"
         filename = tmp_path / name

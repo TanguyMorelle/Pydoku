@@ -9,7 +9,7 @@ from src.domain.updates import GridUpdate, Update
 
 class Unicity(Strategy):
     def __init__(self, sudoku: Sudoku) -> None:
-        super().__init__(sudoku)
+        self.sudoku = sudoku
         self.updated_cells: list[Cell] = []
         self.grid_updates: list[Update] = []
 

@@ -27,7 +27,8 @@ class ValuesGrid(Grid):
 
     def get_block(self, block: int, value: Optional[int] = None) -> npt.NDArray:
         u, v = divmod(block, 3)
-        return self[3 * u : 3 * u + 3, 3 * v : 3 * v + 3]
+        y, x = 3 * u, 3 * v
+        return self[y : y + 3, x : x + 3]
 
 
 class PossibleValuesGrid(Grid):
@@ -46,6 +47,7 @@ class PossibleValuesGrid(Grid):
 
     def get_block(self, block: int, value: Optional[int] = None) -> npt.NDArray:
         u, v = divmod(block, 3)
+        y, x = 3 * u, 3 * v
         if value is not None:
-            return self[3 * u : 3 * u + 3, 3 * v : 3 * v + 3, value]
-        return self[3 * u : 3 * u + 3, 3 * v : 3 * v + 3, :]
+            return self[y : y + 3, x : x + 3, value]
+        return self[y : y + 3, x : x + 3, :]

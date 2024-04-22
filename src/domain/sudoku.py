@@ -5,7 +5,7 @@ import numpy as np
 
 from src.domain.grid import PossibleValuesGrid, ValuesGrid
 from src.domain.units import Units
-from src.domain.updates import GridUpdate, Update
+from src.domain.updates import GridUpdate, ObjUpdate, Update
 from src.utils.grid_tools import get_block
 
 if TYPE_CHECKING:
@@ -70,6 +70,8 @@ class Sudoku:
         for update in list(map(lambda u: u.realign(), updates)):
             if isinstance(update, GridUpdate):
                 self._update_grid(update)
+            if isinstance(update, ObjUpdate):
+                self._update_possible_grid(update)
 
     def _update_grid(self, update: GridUpdate) -> None:
         if self.transposed:
@@ -80,6 +82,12 @@ class Sudoku:
         self.possible_values_grid[*cell_to_update.position, :] = 0
         for cell in update.possible_values_updates:
             self.possible_values_grid[*cell.position, value] = 0
+
+    def _update_possible_grid(self, update: ObjUpdate) -> None:
+        if self.transposed:
+            raise ValueError("Update and sudoku are not aligned")
+        for cell in update.possible_values_updates:
+            self.possible_values_grid[*cell.position, list(cell.values)] = 0
 
     def save(self, name: str) -> None:
         self.sudoku_handler.save(self, name)

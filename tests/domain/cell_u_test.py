@@ -15,7 +15,7 @@ class CellUTest:
         assert cell.block == 3
         assert cell.visibility == get_visibility((5, 2))
 
-    def test__equality_valid(self) -> None:
+    def test__equality__valid(self) -> None:
         # Given
         cell1 = Cell(1, 2)
         cell2 = Cell(1, 2)
@@ -23,7 +23,7 @@ class CellUTest:
         # Then
         assert cell1 == cell2
 
-    def test__equality_invalid(self) -> None:
+    def test__equality__invalid(self) -> None:
         # Given
         cell1 = Cell(1, 2)
         cell2 = Cell(3, 4)
@@ -31,7 +31,7 @@ class CellUTest:
         # Then
         assert cell1 != cell2
 
-    def test__equality_invalid_type(self) -> None:
+    def test__equality__invalid_type(self) -> None:
         # Given
         cell = Cell(1, 2, (2,))
         not_a_cell = [1, 1, (2,)]

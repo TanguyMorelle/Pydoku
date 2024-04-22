@@ -1,4 +1,9 @@
+import itertools
+from typing import Iterator, TypeVar
+
 from src.common.types import Position
+
+T = TypeVar("T")
 
 
 def get_visibility(position: Position) -> list[Position]:
@@ -11,3 +16,8 @@ def get_visibility(position: Position) -> list[Position]:
 
 def get_block(position: Position) -> int:
     return 3 * (position[0] // 3) + position[1] // 3
+
+
+def get_subsets(elements: list[T]) -> Iterator[list[tuple[T]]]:
+    for size in range(2, len(elements)):
+        yield list(itertools.combinations(elements, size))

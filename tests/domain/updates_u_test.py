@@ -2,11 +2,12 @@ from copy import deepcopy
 
 from src.domain.cell import Cell
 from src.domain.units import Units
-from src.domain.updates import GridUpdate
+from src.domain.updates import GridUpdate, ObjUpdate
+from tests.fixtures.fake_strategy_object_factory import fake_strategy_object_factory
 
 
 class GridUpdateUTest:
-    def test__equality_valid(self) -> None:
+    def test__equality__valid(self) -> None:
         # Given
         cell = Cell(4, 2, (1,))
         possible_values_updates = [
@@ -29,7 +30,7 @@ class GridUpdateUTest:
         # When
         assert update_1 == update_2
 
-    def test__equality_invalid(self) -> None:
+    def test__equality__invalid(self) -> None:
         # Given
         cell = Cell(4, 2, (1,))
         possible_values_updates = [
@@ -52,7 +53,7 @@ class GridUpdateUTest:
         # When
         assert update_1 != update_2
 
-    def test__equality_invalid_object(self) -> None:
+    def test__equality__invalid_object(self) -> None:
         # Given
         cell = Cell(4, 2, (1,))
         possible_values_updates = [
@@ -166,7 +167,7 @@ class GridUpdateUTest:
             "    | removes 2 @ r6c3\n"
         )
 
-    def test__realign_not_transposed(self) -> None:
+    def test__realign__not_transposed(self) -> None:
         # Given
         cell = Cell(4, 2, (1,))
         possible_values_updates = [
@@ -186,7 +187,7 @@ class GridUpdateUTest:
         # Then
         assert realigned_update == update
 
-    def test__realign_row_transposed(self) -> None:
+    def test__realign__row_transposed(self) -> None:
         # Given
         cell = Cell(4, 2, (1,))
         possible_values_updates = [
@@ -212,7 +213,7 @@ class GridUpdateUTest:
             Cell(6, 4, (1,)),
         ]
 
-    def test__realign_column_transposed(self) -> None:
+    def test__realign__column_transposed(self) -> None:
         # Given
         cell = Cell(4, 2, (1,))
         possible_values_updates = [
@@ -238,7 +239,7 @@ class GridUpdateUTest:
             Cell(6, 4, (1,)),
         ]
 
-    def test__realign_block_transposed(self) -> None:
+    def test__realign__block_transposed(self) -> None:
         # Given
         cell = Cell(4, 2, (1,))
         possible_values_updates = [
@@ -262,3 +263,133 @@ class GridUpdateUTest:
         assert realigned_update.possible_values_updates == [
             cell.transpose() for cell in possible_values_updates
         ]
+
+
+class ObjUpdateUTest:
+    def test__realign__transposed(self) -> None:
+        # Given
+        obj = fake_strategy_object_factory()
+        possible_values_updates = [
+            Cell(4, 5, (1,)),
+            Cell(4, 6, (1,)),
+        ]
+        update = ObjUpdate(
+            obj=obj,
+            transposed=True,
+            possible_values_updates=possible_values_updates,
+        )
+
+        # When
+        realigned_update = update.realign()
+
+        # Then
+        assert realigned_update.transposed is False
+        assert realigned_update.obj.realign_call_count == 1
+        assert realigned_update.possible_values_updates == [
+            Cell(5, 4, (1,)),
+            Cell(6, 4, (1,)),
+        ]
+
+    def test__realign__not_transposed(self) -> None:
+        # Given
+        obj = fake_strategy_object_factory()
+        possible_values_updates = [
+            Cell(4, 5, (1,)),
+            Cell(4, 6, (1,)),
+        ]
+        update = ObjUpdate(
+            obj=obj,
+            transposed=False,
+            possible_values_updates=possible_values_updates,
+        )
+
+        # When
+        realigned_update = update.realign()
+
+        # Then
+        assert realigned_update.transposed is False
+        assert realigned_update.obj.realign_call_count == 0
+        assert realigned_update.possible_values_updates == possible_values_updates
+
+    def test__equality__valid(self) -> None:
+        # Given
+        obj = fake_strategy_object_factory()
+        possible_values_updates = [
+            Cell(4, 5, (1,)),
+            Cell(4, 6, (1,)),
+        ]
+        update_1 = ObjUpdate(
+            obj=obj,
+            transposed=False,
+            possible_values_updates=possible_values_updates,
+        )
+        update_2 = ObjUpdate(
+            obj=obj,
+            transposed=False,
+            possible_values_updates=deepcopy(possible_values_updates),
+        )
+
+        # When
+        assert possible_values_updates == deepcopy(possible_values_updates)
+        assert update_1 == update_2
+
+    def test__equality__invalid(self) -> None:
+        # Given
+        obj = fake_strategy_object_factory()
+        possible_values_updates = [
+            Cell(4, 5, (1,)),
+            Cell(4, 6, (1,)),
+        ]
+        update_1 = ObjUpdate(
+            obj=obj,
+            transposed=False,
+            possible_values_updates=possible_values_updates,
+        )
+        update_2 = ObjUpdate(
+            obj=obj,
+            transposed=True,
+            possible_values_updates=deepcopy(possible_values_updates),
+        )
+
+        # When
+        assert update_1 != update_2
+
+    def test__equality__invalid_object(self) -> None:
+        # Given
+        obj = fake_strategy_object_factory()
+        possible_values_updates = [
+            Cell(4, 5, (1,)),
+            Cell(4, 6, (1,)),
+        ]
+        update_1 = ObjUpdate(
+            obj=obj,
+            transposed=False,
+            possible_values_updates=possible_values_updates,
+        )
+        update_2 = [5]
+
+        # When
+        assert update_1 != update_2
+
+    def test__stringify(self) -> None:
+        # Given
+        obj = fake_strategy_object_factory()
+        possible_values_updates = [
+            Cell(4, 5, (1,)),
+            Cell(4, 6, (1,)),
+        ]
+        update = ObjUpdate(
+            obj=obj,
+            transposed=False,
+            possible_values_updates=possible_values_updates,
+        )
+
+        # When
+        message = str(update)
+
+        # Then
+        assert message == (
+            "[UNKNOWN] FakeStrategyObject\n"
+            "    | removes r5c6[2]\n"
+            "    | removes r5c7[2]\n"
+        )

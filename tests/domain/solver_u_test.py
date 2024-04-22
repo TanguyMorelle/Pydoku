@@ -6,7 +6,7 @@ from tests.fixtures.grids.sequences import FILLED_GRID_SEQUENCE
 
 
 class SolverUTest:
-    def test__solve_blocked(self):
+    def test__solve__blocked(self):
         # Given
         sudoku = SudokuSeqHandler().load("." * 81)
         solver = Solver(sudoku)
@@ -19,7 +19,7 @@ class SolverUTest:
         # Then
         assert result is False
 
-    def test__solve_valid_grid(self):
+    def test__solve__valid_grid(self):
         # Given
         sudoku = SudokuSeqHandler().load(FILLED_GRID_SEQUENCE)
         solver = Solver(sudoku)

@@ -14,11 +14,11 @@ def fake_sudoku_factory(
     possible_values_overrides: Optional[list[Cell]] = None,
     loader: Optional[SudokuHandlerInterface] = SudokuSeqHandler(),
 ) -> Sudoku:
-    grid = ValuesGrid(np.zeros((9, 9)))
+    grid = ValuesGrid(np.zeros((9, 9), dtype=int))
     for cell in cell_overrides or []:
         grid[cell.row][cell.column] = cell.values[0]
     sudoku = Sudoku(grid, loader)
-    sudoku.possible_values_grid = PossibleValuesGrid(np.zeros((9, 9, 9)))
+    sudoku.possible_values_grid = PossibleValuesGrid(np.zeros((9, 9, 9), dtype=int))
     for cell in possible_values_overrides or []:
         for value in range(9):
             if value in cell.values:

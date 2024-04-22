@@ -7,7 +7,7 @@ from src.adapters.sudoku_seq_handler import SudokuSeqHandler
 from src.domain.cell import Cell
 from src.domain.sudoku import Sudoku
 from src.domain.units import Units
-from src.domain.updates import GridUpdate
+from src.domain.updates import GridUpdate, ObjUpdate
 from tests.fixtures.grids.arrays import (
     EASY_GRID,
     EASY_GRID_POSSIBLE_VALUES,
@@ -17,7 +17,7 @@ from tests.fixtures.grids.arrays import (
 
 
 class SudokuUTest:
-    def test__sudoku_should_setup_on_initialization(self) -> None:
+    def test__sudoku__should_setup_on_initialization(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
 
@@ -26,21 +26,21 @@ class SudokuUTest:
         assert np.array_equal(sudoku.grid, EASY_GRID)
         assert np.array_equal(sudoku.possible_values_grid, EASY_GRID_POSSIBLE_VALUES)
 
-    def test__sudoku_should_return_progress(self) -> None:
+    def test__progress__should_return_progress(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
 
         # Then
         assert sudoku.progress == 39
 
-    def test__sudoku_solved_should_be_false_if_not_solved(self) -> None:
+    def test__solved__should_be_false_if_not_solved(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
 
         # Then
         assert not sudoku.solved
 
-    def test__sudoku_solved_should_be_true_if_solved(self) -> None:
+    def test__solved__should_be_true_if_solved(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID_SOLVED, SudokuSeqHandler())
 
@@ -48,28 +48,28 @@ class SudokuUTest:
         assert sudoku.progress == 100
         assert sudoku.solved
 
-    def test__sudoku_should_return_missing_values_in_row(self) -> None:
+    def test__get_missing_values__should_return_missing_values_in_row(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
 
         # Then
         assert sudoku.get_missing_values(Units.ROW, 1) == [0, 4, 5, 6, 8]
 
-    def test__sudoku_should_return_missing_values_in_column(self) -> None:
+    def test__get_missing_values__should_return_missing_values_in_column(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
 
         # Then
         assert sudoku.get_missing_values(Units.COLUMN, 1) == [0, 2, 4, 5, 7, 8]
 
-    def test__sudoku_should_return_missing_values_in_block(self) -> None:
+    def test__get_missing_values__should_return_missing_values_in_block(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
 
         # Then
         assert sudoku.get_missing_values(Units.BLOCK, 4) == [1, 3, 4, 5, 8]
 
-    def test__sudoku_should_raise_error_if_invalid_unit(self) -> None:
+    def test__sudoku__should_raise_error_if_invalid_unit(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
 
@@ -77,7 +77,7 @@ class SudokuUTest:
         with pytest.raises(ValueError):
             sudoku.get_missing_values(Units.CELL, 4)
 
-    def test__sudoku_should_transpose_grid(self) -> None:
+    def test__transpose__should_transpose_grid(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
 
@@ -91,7 +91,7 @@ class SudokuUTest:
             sudoku.possible_values_grid, EASY_GRID_POSSIBLE_VALUES.transpose(1, 0, 2)
         )
 
-    def test__sudoku_should_realign_if_transposed(self) -> None:
+    def test__ralign__should_realign_if_transposed(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
         sudoku.transpose()
@@ -105,7 +105,7 @@ class SudokuUTest:
         assert np.array_equal(sudoku.initial_grid, EASY_GRID)
         assert np.array_equal(sudoku.possible_values_grid, EASY_GRID_POSSIBLE_VALUES)
 
-    def test__sudoku_should_not_realign_if_not_transposed(self) -> None:
+    def test__realign__should_not_realign_if_not_transposed(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
 
@@ -118,7 +118,7 @@ class SudokuUTest:
         assert np.array_equal(sudoku.initial_grid, EASY_GRID)
         assert np.array_equal(sudoku.possible_values_grid, EASY_GRID_POSSIBLE_VALUES)
 
-    def test__sudoku_should_update_grid(self) -> None:
+    def test__update__should_update_grid(self) -> None:
         # Given
         sudoku = Sudoku(EMPTY_GRID, SudokuSeqHandler())
 
@@ -138,6 +138,14 @@ class SudokuUTest:
                     possible_values_updates=[
                         Cell(4, 3, (2,)),
                         Cell(4, 4, (2,)),
+                    ],
+                ),
+                ObjUpdate(
+                    obj=Mock(),
+                    transposed=False,
+                    possible_values_updates=[
+                        Cell(7, 7, (0, 1)),
+                        Cell(8, 8, (0, 1)),
                     ],
                 ),
             ]
@@ -161,7 +169,13 @@ class SudokuUTest:
         assert np.array_equal(
             sudoku.possible_values_grid[4, 4, :], np.array([1, 1, 0, 1, 1, 1, 1, 1, 1])
         )
-        updated_positions = {(0, 1), (5, 5), (1, 1), (3, 4), (4, 4)}
+        assert np.array_equal(
+            sudoku.possible_values_grid[7, 7, :], np.array([0, 0, 1, 1, 1, 1, 1, 1, 1])
+        )
+        assert np.array_equal(
+            sudoku.possible_values_grid[8, 8, :], np.array([0, 0, 1, 1, 1, 1, 1, 1, 1])
+        )
+        updated_positions = {(0, 1), (5, 5), (1, 1), (3, 4), (4, 4), (7, 7), (8, 8)}
         positions = (
             set((row, column) for row in range(9) for column in range(9))
             - updated_positions
@@ -172,7 +186,7 @@ class SudokuUTest:
             )
             assert sudoku.grid[position] == 0
 
-    def test__sudoku_should_raise_error_if_sudoku_is_transposed(self) -> None:
+    def test__update__should_raise_error_if_sudoku_is_transposed(self) -> None:
         # Given
         sudoku = Sudoku(EASY_GRID, SudokuSeqHandler())
         sudoku.transpose()
@@ -190,7 +204,7 @@ class SudokuUTest:
                 ]
             )
 
-    def test__save_should_save_sudoku(self, tmp_path) -> None:
+    def test__save__should_save_sudoku(self, tmp_path) -> None:
         # Given
         seq_sudoku_loader_mock = Mock(SudokuSeqHandler)
         sudoku = Sudoku(EASY_GRID, seq_sudoku_loader_mock)

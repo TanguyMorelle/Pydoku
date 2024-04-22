@@ -8,7 +8,7 @@ from tests.LoaderSUT import LoaderSUT
 
 
 class SudokuCsvHandlerUTest(LoaderSUT):
-    def test__load_should_raise_exception_if_file_not_csv(self) -> None:
+    def test__load__should_raise_exception_if_file_not_csv(self) -> None:
         # Given
         handler = SudokuCsvHandler()
 
@@ -16,7 +16,7 @@ class SudokuCsvHandlerUTest(LoaderSUT):
         with pytest.raises(InvalidInputException):
             handler.load("some_file.txt")
 
-    def test__load_should_raise_exception_if_invalid_grid_shape(self) -> None:
+    def test__load__should_raise_exception_if_invalid_grid_shape(self) -> None:
         # Given
         handler = SudokuCsvHandler()
         path = self.get_grid("invalid_grid_shape.csv")
@@ -25,7 +25,7 @@ class SudokuCsvHandlerUTest(LoaderSUT):
         with pytest.raises(InvalidInputException):
             handler.load(path)
 
-    def test__load_should_raise_exception_if_invalid_grid_type(self) -> None:
+    def test__load__should_raise_exception_if_invalid_grid_type(self) -> None:
         # Given
         handler = SudokuCsvHandler()
         path = self.get_grid("invalid_grid_type.csv")
@@ -34,7 +34,7 @@ class SudokuCsvHandlerUTest(LoaderSUT):
         with pytest.raises(InvalidInputException):
             handler.load(path)
 
-    def test__load_should_raise_exception_if_invalid_grid_value_negative(self) -> None:
+    def test__load__should_raise_exception_if_invalid_grid_value_negative(self) -> None:
         # Given
         handler = SudokuCsvHandler()
         path = self.get_grid("invalid_grid_value_2.csv")
@@ -43,7 +43,7 @@ class SudokuCsvHandlerUTest(LoaderSUT):
         with pytest.raises(InvalidInputException):
             handler.load(path)
 
-    def test__load_should_raise_exception_if_invalid_grid_value_over_9(self) -> None:
+    def test__load__should_raise_exception_if_invalid_grid_value_over_9(self) -> None:
         # Given
         handler = SudokuCsvHandler()
         path = self.get_grid("invalid_grid_value_1.csv")
@@ -52,7 +52,7 @@ class SudokuCsvHandlerUTest(LoaderSUT):
         with pytest.raises(InvalidInputException):
             handler.load(path)
 
-    def test__load_should_return_sudoku(self) -> None:
+    def test__load__should_return_sudoku(self) -> None:
         # Given
         handler = SudokuCsvHandler()
         path = self.get_grid("easy_grid.csv")
@@ -63,7 +63,7 @@ class SudokuCsvHandlerUTest(LoaderSUT):
         # Then
         assert np.array_equal(sudoku.initial_grid, EASY_GRID)
 
-    def test__save_should_write_grid_to_file(self, tmp_path) -> None:
+    def test__save__should_write_grid_to_file(self, tmp_path) -> None:
         name = "test_csv_handler_save"
         filename = tmp_path / name
         full_filename = tmp_path / (name + "_grid.csv")

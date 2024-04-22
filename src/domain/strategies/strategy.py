@@ -5,8 +5,9 @@ from src.domain.updates import Update
 
 
 class Strategy(ABC):
-    def __init__(self, sudoku: Sudoku) -> None:
-        self.sudoku = sudoku
+
+    @abstractmethod
+    def __init__(self, sudoku: Sudoku) -> None: ...
 
     @abstractmethod
     def execute(self) -> list[Update]: ...
