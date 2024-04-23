@@ -3,8 +3,8 @@ from src.domain.solver import Solver
 from tests.fixtures.grids.sequences import HIDDEN_CANDIDATES_GRID_SEQUENCE
 
 
-class HiddenCandidatesITest:
-    def test__should_use_hidden_candidates_in_solver(self) -> None:
+class NakedCandidatesITest:
+    def test__should_use_naked_candidates_in_solver(self) -> None:
         # Given
         sudoku = SudokuSeqHandler().load(HIDDEN_CANDIDATES_GRID_SEQUENCE)
         solver = Solver(sudoku)
