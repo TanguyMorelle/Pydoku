@@ -25,14 +25,16 @@ class IntersectionRemoval(Strategy):
         columns = list(set(range(9)) - set(range(v, v + 3)))
         missing_values = self.sudoku.get_missing_values(Units.BLOCK, block)
         for value in missing_values:
-            y_pos, x_pos = np.where(self.sudoku.possible_values_grid.get_block(block, value) == 1)
+            y_pos, x_pos = np.where(
+                self.sudoku.possible_values_grid.get_block(block, value) == 1
+            )
             if len(set(y_pos)) == 1 and len(y_pos) > 1:
                 self.sudoku.possible_values_grid[u + y_pos[0], columns, value] = 0
 
     def _multi_line_intersection(self, block: int) -> None:
         u, v = divmod(block, 3)
         columns = list(set(range(9)) - set([v + i for i in range(3)]))
-        sub_grid = self.sudoku.possible_values_grid[u:u + 3, columns, :]
+        sub_grid = self.sudoku.possible_values_grid[u : u + 3, columns, :]
         missing_values = self.sudoku.get_missing_values(Units.BLOCK, block)
         for value in missing_values:
             lines_1, _ = np.where(sub_grid[:, :3, value] == 1)
@@ -40,7 +42,7 @@ class IntersectionRemoval(Strategy):
             lines = set(list(lines_1) + list(lines_2))
             if len(lines) == 2 and len(lines_1) > 0 and len(lines_2) > 0:
                 for i in lines:
-                    self.sudoku.possible_values_grid[u + i, v: v + 3, value] = 0
+                    self.sudoku.possible_values_grid[u + i, v : v + 3, value] = 0
 
     def _box_line_reduction(self, block: int) -> None:
         u, v = divmod(block, 3)
@@ -48,8 +50,14 @@ class IntersectionRemoval(Strategy):
         missing_values = self.sudoku.get_missing_values(Units.BLOCK, block)
         for value in missing_values:
             for row in range(3):
-                x_pos, = np.where(self.sudoku.possible_values_grid[u + row, :, value] == 1)
-                if len(x_pos) and columns[0] <= min(x_pos) and max(x_pos) <= columns[-1]:
+                (x_pos,) = np.where(
+                    self.sudoku.possible_values_grid[u + row, :, value] == 1
+                )
+                if (
+                    len(x_pos)
+                    and columns[0] <= min(x_pos)
+                    and max(x_pos) <= columns[-1]
+                ):
                     line_1, line_2 = list(set([u + k for k in range(3)]) - {u + row})
                     self.sudoku.possible_values_grid[line_1, columns, value] = 0
                     self.sudoku.possible_values_grid[line_2, columns, value] = 0

@@ -1,5 +1,8 @@
 from src.domain.cell import Cell
-from src.domain.strategies.level_1.naked_candidates import NakedCandidates, NakedCandidatesObject
+from src.domain.strategies.level_1.naked_candidates import (
+    NakedCandidates,
+    NakedCandidatesObject,
+)
 from src.domain.updates import ObjUpdate
 from tests.fixtures.fake_sudoku_factory import fake_sudoku_factory
 
@@ -66,7 +69,9 @@ class NakedCandidatesUTest:
             ],
         )
         positions = [(y, x) for y in range(6, 9) for x in range(3, 6)]
-        for position in set((y, x) for y in range(9) for x in range(9) if (y, x) not in positions):
+        for position in set(
+            (y, x) for y in range(9) for x in range(9) if (y, x) not in positions
+        ):
             sudoku.possible_values_grid[*position, :] = 1
         strategy = NakedCandidates(sudoku)
 

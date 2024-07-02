@@ -68,8 +68,23 @@ class HiddenCandidatesUTest:
                 Cell(5, 5, (2, 3, 4, 6, 7, 8)),
             ],
         )
-        positions = {(3, 3), (3, 4), (3, 5), (4, 3), (4, 4), (4, 5), (5, 3), (5, 4,), (5, 5)}
-        for position in set((i, j) for i in range(9) for j in range(9)) - set(positions):
+        positions = {
+            (3, 3),
+            (3, 4),
+            (3, 5),
+            (4, 3),
+            (4, 4),
+            (4, 5),
+            (5, 3),
+            (
+                5,
+                4,
+            ),
+            (5, 5),
+        }
+        for position in set((i, j) for i in range(9) for j in range(9)) - set(
+            positions
+        ):
             sudoku.possible_values_grid[*position, :] = 1
         strategy = HiddenCandidates(sudoku)
 

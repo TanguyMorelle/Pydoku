@@ -54,7 +54,7 @@ class NakedCandidates(Strategy):
         return self.updates
 
     def _check_for_naked_groups_in_row(self, row: int) -> None:
-        x_pos, = np.where(self.sudoku.grid.get_row(row) == 0)
+        (x_pos,) = np.where(self.sudoku.grid.get_row(row) == 0)
         empty_cells = [(row, column) for column in x_pos]
         self._check_for_naked_groups(empty_cells)
 
@@ -70,15 +70,24 @@ class NakedCandidates(Strategy):
             for combination in cell_combination_size:
                 possible_values: set[int] = set()
                 for position in combination:
-                    values, = np.where(self.sudoku.possible_values_grid[*position] == 1)
+                    (values,) = np.where(
+                        self.sudoku.possible_values_grid[*position] == 1
+                    )
                     for value in values:
                         possible_values.add(value)
                 if len(combination) == len(possible_values):
                     cells = [Cell(*position) for position in combination]
                     invalid_positions = set(positions) - set(combination)
-                    self._update_sudoku(cells, invalid_positions, tuple(possible_values))
+                    self._update_sudoku(
+                        cells, invalid_positions, tuple(possible_values)
+                    )
 
-    def _update_sudoku(self, cells: list[Cell], invalid_positions: Iterable[Position], values: tuple[int, ...]) -> None:
+    def _update_sudoku(
+        self,
+        cells: list[Cell],
+        invalid_positions: Iterable[Position],
+        values: tuple[int, ...],
+    ) -> None:
         obj = NakedCandidatesObject(self.sudoku.transposed, cells, values)
         cells_to_update = self._get_cells_to_update(invalid_positions, values)
 
