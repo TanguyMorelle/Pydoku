@@ -1,11 +1,10 @@
 .idea/
 .vscode/
+.venv
 **/__pycache__/
-poetry.lock
 /grids
-tests/data
 test.js
 .coverage
-coverage.json
 htmlcov/
+requirements.txt
 todo

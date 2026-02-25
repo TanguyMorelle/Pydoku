@@ -1,0 +1,19 @@
+name: CI
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  tests:
+    name: run tests
+    uses: ./.github/workflows/tests.yml
+
+  codeQL:
+    name: run codeQL
+    uses: ./.github/workflows/code-ql.yml
+
+  security:
+    name: run security checks
+    uses: ./.github/workflows/security.yml

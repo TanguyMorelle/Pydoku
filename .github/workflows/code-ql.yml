@@ -1,0 +1,26 @@
+name: Code ql
+on:
+  workflow_dispatch:
+  workflow_call:
+
+
+jobs:
+  run-code-ql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Set up environment
+        uses: ./.github/actions/setup-env
+
+      - name: Run formater
+        run: just format-check
+
+      - name: Run linter
+        run: just lint-check
+
+      - name: Run type check
+        run: just typecheck
+
+      - name: Check for dead code
+        run: just dead-code

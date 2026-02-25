@@ -1,8 +1,6 @@
 # Pydoku: Python Sudoku Solver with human reach techniques
 
-[![CI](https://img.shields.io/github/actions/workflow/status/TanguyMorelle/Pydoku/tests.yml?branch=master&logo=github&label=Tests)](https://github.com/pydantic/pydantic/actions?query=event%3Apush+branch%3Amaster+workflow%3ATests)
-[![Coverage](https://coverage-badge.samuelcolvin.workers.dev/TanguyMorelle/Pydoku.svg)](https://coverage-badge.samuelcolvin.workers.dev/redirect/TanguyMorelle/Pydoku)
-
+![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master)
 ---
 
 Most technique implemented originate or are inspired from Andrew Stuart's
@@ -10,8 +8,9 @@ great [website](https://www.sudokuwiki.org/sudoku.htm).
 
 ## Installation
 
+The project requires `just` to run, you can install it with
 ```console
-bash scripts/setup.sh
+sudo apt install just
 ```
 
 ## Usage
@@ -48,57 +47,55 @@ python main.py --help
 
 ### Base
 
-- [x] 0: Basic Sudoku Rules
+✅ 0: Basic Sudoku Rules (Hidden singles)
 
 ### Level 1
 
-- [ ] 1: Hidden Singles
-- [ ] 2: Naked Pairs/Triples
-- [ ] 3: Hidden Pairs/Triples
-- [ ] 4: Naked/Hidden Quads
-- [ ] 5: Pointing Pairs
-- [ ] 6: Box/Line Reduction
+✅ 1: Naked Sets<br>
+✅ 2: Hidden Sets<br>
+❌ 3: Pointing Pairs<br>
+❌ 4: Box/Line Reduction<br>
 
 ### Level 2
 
-- [ ] 7: X-Wing
-- [ ] 8: Simple Colouring
-- [ ] 9: Y-Wing
-- [ ] 10: Swordfish
-- [ ] 11: XYZ Wing
-- [ ] 12: BUG
-- [ ] 13: Avoidable Rectangles
+❌ 5: X-Wing<br>
+❌ 6: Simple Colouring<br>
+❌ 7: Y-Wing<br>
+❌ 8: Swordfish<br>
+❌ 9: XYZ Wing<br>
+❌ 10: BUG<br>
+❌ 11: Avoidable Rectangles
 
 ### Level 3
 
-- [ ] 14-a: X-Chains
-- [ ] 14-b: X-Cycles
-- [ ] 15: XY-Chain
-- [ ] 16: 3D Medusa
-- [ ] 17: Jellyfish
-- [ ] 18: Unique Rectangles
-- [ ] 19: Fireworks
-- [ ] 20: SK Loops
-- [ ] 21: Extended Unique Rect.
-- [ ] 22: Hidden Unique Rect's
-- [ ] 23: WXYZ Wing
-- [ ] 24: Aligned Pair Exclusion
+❌ 12-a: X-Chains<br>
+❌ 12-b: X-Cycles<br>
+❌ 13: XY-Chain<br>
+❌ 14: 3D Medusa<br>
+❌ 15: Jellyfish<br>
+❌ 16: Unique Rectangles<br>
+❌ 17: Fireworks<br>
+❌ 18: SK Loops<br>
+❌ 19: Extended Unique Rect.<br>
+❌ 20: Hidden Unique Rect's<br>
+❌ 21: WXYZ Wing<br>
+❌ 22: Aligned Pair Exclusion
 
 ### Level 4
 
-- [ ] 25: Exocet
-- [ ] 26: Grouped X-Cycles
-- [ ] 27: Empty Rectangles
-- [ ] 28: Finned X-Wing
-- [ ] 29: Finned Swordfish
-- [ ] 30a: Inference Chains
-- [ ] 30b: AIC with Groups
-- [ ] 30c: AIC with ALSs
-- [ ] 31: Sue-De-Coq
-- [ ] 32: Digit Forcing chains
-- [ ] 33: Nishio Forcing Chains
-- [ ] 34: Cell Forcing Chains
-- [ ] 35: Unit Forcing Chains
-- [ ] 36: Almost Locked Sets
-- [ ] 37: Death Blossom
-- [ ] 38: Pattern Overlay
+❌ 23: Exocet<br>
+❌ 24: Grouped X-Cycles<br>
+❌ 25: Empty Rectangles<br>
+❌ 26: Finned X-Wing<br>
+❌ 27: Finned Swordfish<br>
+❌ 28a: Inference Chains<br>
+❌ 28b: AIC with Groups<br>
+❌ 28c: AIC with ALSs<br>
+❌ 29: Sue-De-Coq<br>
+❌ 30: Digit Forcing chains<br>
+❌ 31: Nishio Forcing Chains<br>
+❌ 32: Cell Forcing Chains<br>
+❌ 33: Unit Forcing Chains<br>
+❌ 34: Almost Locked Sets<br>
+❌ 35: Death Blossom<br>
+❌ 36: Pattern Overlay

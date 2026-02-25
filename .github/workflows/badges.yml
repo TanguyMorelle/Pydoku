@@ -2,35 +2,39 @@ name: Badges
 
 on:
   workflow_run:
-    workflows: [Tests]
+    workflows: [CI]
     types: [completed]
     branch:
       - master
-
-permissions:
-  statuses: write
 
 jobs:
   build-coverage-badge:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - run: pip install smokeshow
+      - name: Set up environment
+        uses: ./.github/actions/setup-env
 
-      - uses: dawidd6/action-download-artifact@v3
-        with:
-          workflow: tests.yml
-          commit: ${{ github.event.workflow_run.head_sha }}
+      - name: Run tests with coverage
+        run: |
+          pytest --cov=your_package --cov-report=term
 
-      - run: smokeshow upload coverage-html
-        env:
-          SMOKESHOW_GITHUB_STATUS_DESCRIPTION: Coverage {coverage-percentage}
-          SMOKESHOW_GITHUB_COVERAGE_THRESHOLD: 100
-          SMOKESHOW_GITHUB_CONTEXT: coverage
-          SMOKESHOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
-          SMOKESHOW_AUTH_KEY: ${{ secrets.SMOKESHOW_AUTH_KEY }}
+      - name: Extract coverage percentage
+        run: |
+          COVERAGE=$(coverage report | tail -1 | awk '{print $4}' | sed 's/%//')
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+
+      - name: Create badge
+        run: |
+          COLOR="red"
+          if [ "$COVERAGE" -ge 80 ]; then COLOR="brightgreen";
+          elif [ "$COVERAGE" -ge 60 ]; then COLOR="yellow";
+          fi
+          
+          mkdir -p badges
+          echo "{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\"${COVERAGE}%\",\"color\":\"$COLOR\"}" > badges/coverage.json
