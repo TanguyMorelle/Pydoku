@@ -1,75 +1,38 @@
-[tool.poetry]
-name = "src"
-version = "1.0.0"
+[project]
+name = "Pydoku"
+version = "2.0.0"
 description = "Python algorithmic sudoku solver"
-authors = ["Tanguy Morelle"]
-readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.9"
-numpy = "^1.26.4"
-pytest = "^8.0.0"
-flake8 = "^7.0.0"
-mypy = "^1.8.0"
-black = "^24.2.0"
-vulture = "^2.11"
-bandit = "^1.7.7"
-safety = "^3.0.1"
-isort = "^5.13.2"
-coverage = "^7.4.2"
-pre-commit = "^3.6.2"
-
-[tool.pytest.ini_options]
-tmp_path_retention_count = 1
-minversion = "6.0"
-addopts = "-ra -q"
-testpaths = [
-    "tests",
-    "integration",
+authors = [
+    {name = "Tanguy Morelle"}
 ]
-python_files = "*_test.py"
-python_classes = "*Test"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "jaxtyping==0.3.9",
+    "numpy==2.4.2",
+    "pydantic==2.12.5",
+]
 
-[tool.isort]
-profile = "black"
+[dependency-groups]
+dev = [
+    "bandit==1.9.4",
+    "coverage==7.13.4",
+    "pip-audit==2.10.0",
+    "pytest==9.0.2",
+    "ruff==0.15.2",
+    "ty==0.0.18",
+    "vulture==2.14",
+]
 
-[tool.black]
-line-length = 88
-exclude = '''
-/(
-      \.git
-    | \.venv
-    | \.__pycache__
-    | \.pytest_cache
-    | \.mypy_cache
-)/
-'''
+[tool.ruff.lint]
+ignore = ["F722"]
 
 [tool.vulture]
 min_confidence = 80
 paths = ["src/", "tests/"]
-# issue with @asbtractmethod not beeing ignored properly
-exclude = ["*_interface.py"]
 
 [tool.coverage.run]
 omit = [
     "*/__init__.py",
-    "tests/*",
-    "src/domain/ports/*",
-]
-
-[tool.coverage.report]
-exclude_also = [
-    "if TYPE_CHECKING:"
-]
-
-
-[tool.poetry.scripts]
-tests = "scripts:coverage"
-linter = "scripts:run_linter"
-
-[tool.mypy]
-ignore_missing_imports = true
-exclude = [
     "tests/*",
 ]
