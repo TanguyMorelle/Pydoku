@@ -1,8 +1,8 @@
 name: Code ql
+
 on:
   workflow_dispatch:
   workflow_call:
-
 
 jobs:
   run-code-ql:

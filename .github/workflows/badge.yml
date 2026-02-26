@@ -2,7 +2,6 @@ name: Badges
 
 on:
   workflow_dispatch:
-  workflow_call:
   push:
     branches: [ "master" ]
 
@@ -12,7 +11,7 @@ permissions:
   id-token: write
 
 jobs:
-  run-tests:
+  generate-coverage-badge:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -26,22 +25,14 @@ jobs:
       - name: Run tests with coverage
         run: just coverage
 
-      - name: Upload coverage HTML report
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        with:
-          name: coverage-html
-          path: htmlcov
-
-      - name: Upload coverage percentage
+      - name: get coverage percentage
         run : |
           coverage_percent=$(uv run coverage report | tail -n 1 | awk '{print int($4)}')
           echo "COVERAGE_PERCENT=$coverage_percent" >> $GITHUB_ENV
 
       - name: create badge
         run: |
-          mkdir -p badge
           percent=${{ env.COVERAGE_PERCENT }}
-  
           # Convert percentage to a color on a red → yellow → green gradient
           # Red = 224,93,68 (#e05d44), Yellow = 223,179,23 (#dfb317), Green = 76,193,1 (#4c1)
           if [ $percent -le 50 ]; then
@@ -56,14 +47,15 @@ jobs:
             b=$((23 + (1-23)*(percent-50)/50))
           fi
           color=$(printf "#%02x%02x%02x" $r $g $b)
+          
           mkdir -p coverage-badge
           echo "{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\"${percent}%\",\"color\":\"${color}\"}" > coverage-badge/coverage.json
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
 
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b
         with:
           path: coverage-badge
 
