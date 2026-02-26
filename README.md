@@ -1,18 +1,19 @@
 # Pydoku: Python Sudoku Solver with human reach techniques
-
-![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master)
----
+![CI](https://github.com/TanguyMorelle/Pydoku/actions/workflows/ci.yml/badge.svg?branch=master)
 
 Most technique implemented originate or are inspired from Andrew Stuart's
 great [website](https://www.sudokuwiki.org/sudoku.htm).
 
+---
 ## Installation
 
 The project requires `just` to run, you can install it with
 ```console
 sudo apt install just
 ```
+<br>
 
+---
 ## Usage
 
 For more information on how to use the solver run:
@@ -42,7 +43,10 @@ python main.py --help
 
 - **sequence** (if sequence input)<br>
   81 characters long string with the solution or the state of the grid if in a locked state
+<br>
+<br>
 
+---
 ## Currently Implemented Techniques
 
 ### Base
