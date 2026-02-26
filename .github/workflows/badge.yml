@@ -1,0 +1,71 @@
+name: Badges
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Set up environment
+        uses: ./.github/actions/setup-env
+
+      - name: Run tests with coverage
+        run: just coverage
+
+      - name: Upload coverage HTML report
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: coverage-html
+          path: htmlcov
+
+      - name: Upload coverage percentage
+        run : |
+          coverage_percent=$(uv run coverage report | tail -n 1 | awk '{print int($4)}')
+          echo "COVERAGE_PERCENT=$coverage_percent" >> $GITHUB_ENV
+
+      - name: create badge
+        run: |
+          mkdir -p badge
+          percent=${{ env.COVERAGE_PERCENT }}
+  
+          # Convert percentage to a color on a red → yellow → green gradient
+          # Red = 224,93,68 (#e05d44), Yellow = 223,179,23 (#dfb317), Green = 76,193,1 (#4c1)
+          if [ $percent -le 50 ]; then
+            # interpolate red → yellow
+            r=$((224 + (223-224)*percent/50))
+            g=$((93 + (179-93)*percent/50))
+            b=$((68 + (23-68)*percent/50))
+          else
+            # interpolate yellow → green
+            r=$((223 + (76-223)*(percent-50)/50))
+            g=$((179 + (193-179)*(percent-50)/50))
+            b=$((23 + (1-23)*(percent-50)/50))
+          fi
+          color=$(printf "#%02x%02x%02x" $r $g $b)
+          mkdir -p coverage-badge
+          echo "{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\"${percent}%\",\"color\":\"${color}\"}" > coverage-badge/coverage.json
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: coverage-badge
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
