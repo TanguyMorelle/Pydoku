@@ -1,5 +1,6 @@
 # Pydoku: Python Sudoku Solver with human reach techniques
 ![CI](https://github.com/TanguyMorelle/Pydoku/actions/workflows/ci.yml/badge.svg?branch=master)
+![Coverage](https://img.shields.io/endpoint?url=https://TanguyMorelle.github.io/Pydoku/coverage.json)
 
 Most technique implemented originate or are inspired from Andrew Stuart's
 great [website](https://www.sudokuwiki.org/sudoku.htm).
