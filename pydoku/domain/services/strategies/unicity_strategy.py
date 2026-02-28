@@ -6,6 +6,7 @@ from pydoku.domain.models.cell import Cell
 from pydoku.domain.models.sudoku import Sudoku
 from pydoku.domain.models.units import Units
 from pydoku.domain.models.updates.unicity_update import UnicityUpdate
+from pydoku.domain.models.updates.update import Update
 from pydoku.utils.grid_tools import get_visibility
 
 
@@ -51,7 +52,7 @@ class UnicityStrategy:
                 )
         return updates
 
-    def unicity_in_blocks(self, sudoku: Sudoku, block: int) -> Sequence[UnicityUpdate]:
+    def unicity_in_blocks(self, sudoku: Sudoku, block: int) -> Sequence[Update]:
         updates = []
         missing_values = sudoku.grid.get_block(block).get_missing_values()
         for value in missing_values:

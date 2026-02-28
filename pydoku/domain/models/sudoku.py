@@ -1,3 +1,5 @@
+from collections.abc import Generator
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Self
 
@@ -5,6 +7,7 @@ import numpy as np
 
 from pydoku.domain.models.grid import PossibleValuesGrid, ValuesGrid
 from pydoku.domain.models.types import Array9x9, Array9x9x9
+from pydoku.domain.models.updates.update import Update
 from pydoku.utils.grid_tools import get_visibility
 
 
@@ -14,8 +17,17 @@ class Sudoku:
     grid: ValuesGrid
     options: PossibleValuesGrid
     transposed: bool
+    updates: dict[int, list[Update]]
 
-    def transpose(self) -> None:
+    @contextmanager
+    def transpose(self) -> Generator[Sudoku, ..., ...]:
+        self._transpose()
+        try:
+            yield self
+        finally:
+            self._transpose()
+
+    def _transpose(self) -> None:
         self.initial_grid = self.initial_grid.transpose((1, 0))
         self.grid = self.grid.transpose((1, 0))
         self.options = self.options.transpose((1, 0, 2))
@@ -23,7 +35,7 @@ class Sudoku:
 
     def realign(self) -> None:
         if self.transposed:
-            self.transpose()
+            self._transpose()
 
     @property
     def progress(self) -> int:
@@ -32,6 +44,11 @@ class Sudoku:
     @property
     def solved(self) -> bool:
         return self.grid.sum() == 9 * 45
+
+    def add_update(self, step: int, update: Update) -> None:
+        updates = self.updates.get(step, [])
+        updates.append(update)
+        self.updates[step] = updates
 
 
 class SudokuBuilder:
@@ -90,4 +107,5 @@ class SudokuBuilder:
             grid=self._get_grid(),
             options=self._get_options(),
             transposed=self._transposed,
+            updates={},
         )

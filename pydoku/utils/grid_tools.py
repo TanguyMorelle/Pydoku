@@ -16,6 +16,16 @@ def get_block(position: Position) -> int:
     return 3 * (position[0] // 3) + position[1] // 3
 
 
+def get_block_rows(block: int) -> Sequence[int]:
+    k = block // 3
+    return range(3 * k, 3 * k + 3)
+
+
+def get_block_columns(block: int) -> Sequence[int]:
+    k = block % 3
+    return range(3 * k, 3 * k + 3)
+
+
 def get_subsets[T](elements: list[T], *, max_size=None) -> Iterator[list[list[T]]]:
     for size in range(2, max_size or len(elements)):
         yield list(itertools.combinations(elements, size))

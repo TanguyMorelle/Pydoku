@@ -1,13 +1,14 @@
+from pydoku.application.checks.check import Check
 from pydoku.domain.models.sudoku import Sudoku
 from pydoku.domain.models.updates.update import Update
-from pydoku.domain.services.unicity_strategy import UnicityStrategy
+from pydoku.domain.services.strategies.unicity_strategy import UnicityStrategy
 
 
-class CheckUnicity:
+class CheckUnicity(Check):
     def __init__(self, unicity_strategy: UnicityStrategy) -> None:
         self.strategy = unicity_strategy
 
-    def execute(self, sudoku: Sudoku) -> list[Update]:
+    def execute(self, sudoku: Sudoku, early_stop: bool) -> list[Update]:
         cell_updates = self._get_cell_updates(sudoku)
         row_updates = self._get_row_updates(sudoku)
         column_updates = self._get_column_updates(sudoku)
@@ -28,11 +29,10 @@ class CheckUnicity:
         return updates
 
     def _get_column_updates(self, sudoku: Sudoku) -> list[Update]:
-        sudoku.transpose()
         updates: list[Update] = []
-        for column in range(9):
-            updates.extend(self.strategy.unicity_in_row(sudoku, column))
-        sudoku.transpose()
+        with sudoku.transpose() as transpose_sudoku:
+            for column in range(9):
+                updates.extend(self.strategy.unicity_in_row(transpose_sudoku, column))
         return updates
 
     def _get_block_updates(self, sudoku: Sudoku) -> list[Update]:

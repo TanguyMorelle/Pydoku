@@ -39,6 +39,5 @@ class UnicityUpdate(BaseModel, GridUpdate):
             and self.column == other.column
             and self.value == other.value
             and self.transposed == other.transposed
-            and len(self.options_updates) == len(self.options_updates)
-            and all(update in other.options_updates for update in self.options_updates)
+            and sorted(self.options_updates) == sorted(self.options_updates)
         )

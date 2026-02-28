@@ -4,7 +4,7 @@ import pytest
 from pydoku.domain.models.cell import Cell
 from pydoku.domain.models.units import Units
 from pydoku.domain.models.updates.unicity_update import UnicityUpdate
-from pydoku.domain.services.unicity_strategy import UnicityStrategy
+from pydoku.domain.services.strategies.unicity_strategy import UnicityStrategy
 from pydoku.utils.grid_tools import get_block, get_visibility
 from tests.fixtures.sudoku_test_builder import SudokuTestBuilder
 
@@ -51,7 +51,6 @@ class TestUnicityStrategy:
         sudoku = sudoku_builder.with_initial_grid_column(
             2, np.array([1, 2, 3, 0, 6, 7, 8, 9, 4])
         ).build()
-        sudoku.transpose()
         expected_options_update = [
             Cell(row=row, column=column, values=[4])
             for (row, column) in get_visibility((2, 3))
@@ -69,7 +68,8 @@ class TestUnicityStrategy:
         ]
 
         # WHEN
-        updates = strategy.unicity_in_cell(sudoku, 2, 3)
+        with sudoku.transpose() as transposed_sudoku:
+            updates = strategy.unicity_in_cell(transposed_sudoku, 2, 3)
 
         # THEN
         assert len(updates) == len(expected_updates)
@@ -126,7 +126,6 @@ class TestUnicityStrategy:
         sudoku = sudoku_builder.with_initial_grid_column(
             2, np.array([1, 2, 3, 0, 5, 7, 6, 9, 4])
         ).build()
-        sudoku.transpose()
         expected_options_update = [
             Cell(row=row, column=column, values=[7])
             for (row, column) in get_visibility((2, 3))
@@ -144,7 +143,8 @@ class TestUnicityStrategy:
         ]
 
         # WHEN
-        updates = strategy.unicity_in_row(sudoku, 2)
+        with sudoku.transpose() as transposed_sudoku:
+            updates = strategy.unicity_in_row(transposed_sudoku, 2)
 
         # THEN
         assert len(updates) == len(expected_updates)
@@ -225,7 +225,6 @@ class TestUnicityStrategy:
                 ]
             )
         ).build()
-        sudoku.transpose()
         expected_options_update = [
             Cell(row=row, column=column, values=[4])
             for (row, column) in get_visibility((8, 1))
@@ -243,7 +242,8 @@ class TestUnicityStrategy:
         ]
 
         # WHEN
-        updates = strategy.unicity_in_blocks(sudoku, 6)
+        with sudoku.transpose() as transposed_sudoku:
+            updates = strategy.unicity_in_blocks(transposed_sudoku, 6)
 
         # THEN
         assert len(updates) == len(expected_updates)

@@ -5,7 +5,7 @@ from pydoku.domain.models.cell import Cell
 from pydoku.domain.models.updates.level_1.naked_candidates_update import (
     NakedCandidatesUpdate,
 )
-from pydoku.domain.services.level_1.naked_candidates_strategy import (
+from pydoku.domain.services.strategies.level_1.naked_candidates_strategy import (
     NakedCandidatesStrategy,
 )
 from tests.fixtures.sudoku_test_builder import SudokuTestBuilder
@@ -55,7 +55,7 @@ class TestCheckNakedCandidates:
         ]
 
         # WHEN
-        updates = strategy.check_for_naked_groups_in_row(sudoku, 4)
+        updates = strategy.check_for_naked_groups_in_row(sudoku, 4, False)
 
         # THEN
         assert len(updates) == 1
@@ -93,7 +93,7 @@ class TestCheckNakedCandidates:
         ]
 
         # WHEN
-        updates = strategy.check_for_naked_groups_in_block(sudoku, 0)
+        updates = strategy.check_for_naked_groups_in_block(sudoku, 0, False)
 
         # THEN
         assert len(updates) == 1
