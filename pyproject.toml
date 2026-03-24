@@ -19,7 +19,7 @@ dev = [
     "coverage==7.13.4",
     "pip-audit==2.10.0",
     "pytest==9.0.2",
-    "ruff==0.15.2",
+    "ruff==0.15.7",
     "ty==0.0.18",
     "vulture==2.14",
 ]
